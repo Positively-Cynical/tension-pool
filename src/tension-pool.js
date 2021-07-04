@@ -20,7 +20,7 @@ function registerLayer() {
 
 function messages(data) {
     if (data.datatype === "message") {
-        ui.notifications.info("Tension Pool | " + data.message);
+        ui.notifications.info(poscName + " | " + data.message);
     }
 
     if (data.datatype === "updatedisplay") {
@@ -32,22 +32,23 @@ function messages(data) {
 function sendmessage(message){
 
     let outputto = game.settings.get("tension-pool",'outputto');
+	let poscName = game.settings.get("tension-pool",'poscName');
 
     if (outputto === 'both' || outputto === 'notfications' ) {
-        ui.notifications.info("Tension Pool | " + message);
+        ui.notifications.info(poscName + " | " + message);
         game.socket.emit('module.tension-pool', {
             message: message,datatype:"message"
         });
     }
 
     if (outputto === 'both' || outputto === 'chatlog' ) {
-        ChatMessage.create({content: message,speaker:ChatMessage.getSpeaker({alias: "Tension Pool"})}, {});
+        ChatMessage.create({content: message,speaker:ChatMessage.getSpeaker({alias: poscName})}, {});
     }
 }
 
 function sendmessageoveride(message){
-
-    ChatMessage.create({content: message,speaker:ChatMessage.getSpeaker({alias: "Tension Pool"})}, {});
+	let poscName = game.settings.get("tension-pool",'poscName');
+    ChatMessage.create({content: message,speaker:ChatMessage.getSpeaker({alias: poscName})}, {});
 
 }
 
@@ -65,8 +66,8 @@ Hooks.once('diceSoNiceReady', (dice3d) => {
     for (i = 0; i < systemlist.length; i++) {
       dice3d.addDicePreset({
           type:"dt6",
-          labels:["modules/tension-pool/images/Danger.webp","","","","","",],
-            bumpMaps:["modules/tension-pool/images/Danger_bump.webp","","","","","",],
+          labels:["modules/tension-pool/images/Dice_Tension.webp","","","","","",],
+            bumpMaps:["modules/tension-pool/images/Dice_Tension_bump.webp","","","","","",],
           system: systemlist[i],
         });
     }
@@ -99,7 +100,8 @@ Hooks.on("ready", () => {
 });
 
 async function updatedisplay(diceinpool){
-
+	let TensionFilled = game.settings.get("tension-pool",'TensionFilled');
+	let TensionEmpty = game.settings.get("tension-pool",'TensionEmpty');
     if (game.user.isGM) {
         game.socket.emit('module.tension-pool', {
             message: diceinpool, datatype: "updatedisplay"
@@ -107,14 +109,14 @@ async function updatedisplay(diceinpool){
     }
 
     let display = document.getElementById("TensionDice-Pool");
-    let pool = 'Tension Pool:';
+    let pool = '<p id="TensionDice-Pool" style="flex-direction:row;flex-wrap:wrap;justify-content:flex-start;text-align:center;align-items:center;"></p>';
     let i;
     for (i = 0; i < diceinpool; i++) {
-      pool+='<img src="modules/tension-pool/images/Danger_black.webp" alt="!" width="25" height="25">'
+      pool+='<img class="noborder" src="'+ TensionFilled + '" alt="!" width="25" height="25">'
     }
 
     for (i = 0; i < game.settings.get("tension-pool",'maxdiceinpool')-diceinpool; i++) {
-      pool+='<img src="modules/tension-pool/images/EmptyDie.webp" alt="X" width="25" height="25">'
+      pool+='<img class="noborder" src="'+ TensionEmpty + '" alt="X" width="25" height="25">'
     }
 
 
@@ -122,7 +124,7 @@ async function updatedisplay(diceinpool){
 }
 
 Hooks.on("renderChatLog", (app, html) => {
-    let pool = '<p id="TensionDice-Pool" style="justify-content: center; align-items: center;">Tension Pool:</p>'
+    let pool = '<p id="TensionDice-Pool" style="flex-direction:row;flex-wrap:wrap;justify-content:flex-start;text-align:center;align-items:center;"></p>'
 
     let footer = html.find(".directory-footer");
 
@@ -214,10 +216,10 @@ async function rollpool(dice,message,dicesize){
     let complication;
 
     if (dicesize==="df"){
-        let message = "Tension Pool"
+        let message = poscName
         Ro.toMessage({flavor: message},{},true)
     } else if (game.settings.get("tension-pool",'outputsum')){
-        let message = "Tension Pool"
+        let message = poscName
         Ro.toMessage({flavor: message},{},true)
     } else {
         await game.dice3d.showForRoll(Ro, game.user, true, null)
@@ -291,7 +293,7 @@ async function rollpool(dice,message,dicesize){
 }
 
 Hooks.on("getSceneControlButtons", (controls) => {
-    if (game.user.isGM  && game.settings.get("tension-pool",'scenecontrols')) {
+    if (game.user.isGM) {
         controls.push({
             name: "Tension Pool Controls",
             title: "Tension Pool Controls",
@@ -344,63 +346,6 @@ Hooks.on("getSceneControlButtons", (controls) => {
     }
 });
 
-Hooks.on("chatCommandsReady", function(chatCommands) {
-
-    chatCommands.registerCommand(chatCommands.createCommandFromData({
-        commandKey: "/TPadddie",
-        invokeOnCommand: () => adddie(),
-        shouldDisplayToChat: false,
-        iconClass: "fas fa-minus-square",
-        description: "Tension Pool - Adds a Die to the Pool",
-        gmOnly: true
-    }));
-
-    chatCommands.registerCommand(chatCommands.createCommandFromData({
-        commandKey: "/TPremovedie",
-        invokeOnCommand: () => removedie(),
-        shouldDisplayToChat: false,
-        iconClass: "fas fa-minus-square",
-        description: "Tension Pool - Add Die to the Pool",
-        gmOnly: true
-    }));
-
-    chatCommands.registerCommand(chatCommands.createCommandFromData({
-        commandKey: "/TPremovedie",
-        invokeOnCommand: () => removedie(),
-        shouldDisplayToChat: false,
-        iconClass: "fas fa-minus-square",
-        description: "Tension Pool - Remove Die from Pool",
-        gmOnly: true
-    }));
-
-    chatCommands.registerCommand(chatCommands.createCommandFromData({
-        commandKey: "/TPemptypool",
-        invokeOnCommand: () => emptypool(),
-        shouldDisplayToChat: false,
-        iconClass: "fas fa-battery-empty",
-        description: "Tension Pool - Empty the Pool (no roll)",
-        gmOnly: true
-    }));
-
-    chatCommands.registerCommand(chatCommands.createCommandFromData({
-        commandKey: "/TProllpool",
-        invokeOnCommand: () => rollpool(game.settings.get("tension-pool",'diceinpool'),"Dice Pool Rolled"),
-        shouldDisplayToChat: false,
-        iconClass: "fas fa-dice-six",
-        description: "Tension Pool - Roll Dice Pool",
-        gmOnly: true
-    }));
-
-    chatCommands.registerCommand(chatCommands.createCommandFromData({
-        commandKey: "/TProllfullpool",
-        invokeOnCommand: () => rollpool(game.settings.get("tension-pool",'maxdiceinpool'),"Dice Pool Filled, Rolled and Emptied"),
-        shouldDisplayToChat: false,
-        iconClass: "fas fa-dice",
-        description: "Tension Pool - Roll Full Dice Pool",
-        gmOnly: true
-    }));
-})
-
 export class Tension {
 
     async adddie(){
@@ -435,13 +380,3 @@ export class Tension {
         await rollpool(dice,message,dicesize)
     }
 }
-/*Hooks.on("renderSidebarTab", async(object, html) => {
-  if (object instanceof Settings) {
-    const details = html.find("#game-details");
-    const TensionDetails = document.createElement("li");
-    TensionDetails.classList.add("donation-link");
-    TensionDetails.innerHTML = "Tension Pool <a title='Donate' href='https://ko-fi.com/sdoehren'><img src='https://storage.ko-fi.com/cdn/cup-border.png'></a> <span><a href='https://github.com/SDoehren/tension-pool/issues'>Report issue</a></span>";
-    details.append(TensionDetails);
-  }
-})*/
-
