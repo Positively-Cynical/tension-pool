@@ -1,48 +1,20 @@
 # Tension Pool
 
-[![GitHub release](https://img.shields.io/github/release/sdoehren/tension-pool.svg)](https://GitHub.com/sdoehren/tension-pool/releases/)
-[![GitHub issues](https://img.shields.io/github/issues/sdoehren/tension-pool.svg)](https://GitHub.com/sdoehren/tension-pool/issues/)
-
-
-[![Forge Install %](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Ftension-pool)](https://GitHub.com/sdoehren/tension-pool/releases/)
-[![Github all releases](https://img.shields.io/github/downloads/sdoehren/tension-pool/total.svg)](https://GitHub.com/sdoehren/tension-pool/releases/)
-[![Github Releases (by Release)](https://img.shields.io/github/downloads/sdoehren/tension-pool/latest/total.svg)](https://GitHub.com/sdoehren/tension-pool/releases/)
-
-[![ko-fi](https://img.shields.io/badge/ko--fi-Support%20Me-red?style=flat-square&logo=ko-fi)](https://ko-fi.com/sdoehren)
-[![Patreon](https://img.shields.io/badge/Patreon-Support%20Me-red?style=flat-square&logo=patreon)](https://www.patreon.com/bePatron?u=49614365)
-
-[![The Forge](https://img.shields.io/badge/The%20Forge-Pay%20What%20You%20Want-success?style=flat-square)](https://eu.forge-vtt.com/bazaar#package=tension-pool)
-
 Tension Pool is a Foundry Implementation and Evolution of the Angry GM's idea of [Time Pools/Tension Pools](https://theangrygm.com/making-things-complicated/).
 
+This is an edit to SDoehren's version with additions I wanted within my home instance of foundry.
 
 ## Instructions
 
-Can be controlled from scene controls or from chat commands
-
-## Chat Commands
-
-- /TPadddie - Adds a Die to the Pool
-- /TPremovedie - Remove Die from Pool
-- /TPemptypool - Empty the Pool (no roll)
-- /TProllpool - Roll Dice Pool
-- /TProllfullpool - Roll Dice Pool
-
-## Planned updates
-
-- Auto Roll on a Roll Table if a Complication occurs
-- Add controls to the pool below the chat
+Can be controlled from scene controls
 
 ## Hook Calls and API
 
 Hook Calls and API are available in a [separate document](api.md)
 
-
 ## Change log
 
 [Change log](Changelog.md)
-
-
 
 ### Licence
 
