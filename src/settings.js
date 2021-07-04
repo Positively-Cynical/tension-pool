@@ -1,23 +1,40 @@
 
 
 export const registerSettings = function () {
-    game.settings.register("tension-pool", "diceinpool", {
+    game.settings.register("tension-pool", "poscName", {
+        name: "Name of the dice pool?",
+        scope: "world",
+        config: true,
+        default: "Tension Pool",
+        type: String
+    });
+
+    game.settings.register("tension-pool", "TensionFilled", {
+        name: "Image for additions to Tension Pool",
+		hint: "These will represent the Tension Pool in each filled slot in the chat footer.",
+        scope: "world",
+        config: true,
+        default: "modules/tension-pool/images/Tension_Filled.webp",
+        type: String,
+		filePicker: true
+    });
+	
+	game.settings.register("tension-pool", "TensionEmpty", {
+        name: "Image for empty parts of the Tension Pool",
+		hint: "These will represent the Tension Pool in each unfilled slot in the chat footer.",
+        scope: "world",
+        config: true,
+        default: "modules/tension-pool/images/Tension_Empty.webp",
+        type: String,
+		filePicker: true
+    });
+	
+	game.settings.register("tension-pool", "diceinpool", {
         name: "dice in pool",
         scope: "world",
         config: false,
         default: 0,
         type: Number
-    });
-
-    game.settings.register("tension-pool", "scenecontrols", {
-        name: "Enable Scene Controls?",
-        scope: "world",
-        config: true,
-        default: true,
-        type: Boolean,
-        onChange: () => {
-            location.reload();
-        }
     });
 
     game.settings.register("tension-pool", "maxdiceinpool", {
