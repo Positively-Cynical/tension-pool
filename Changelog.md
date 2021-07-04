@@ -1,5 +1,16 @@
 # Change Log
 
+#### 0.0.46 - Positively-Cynical patch
++ Added config to rename all public instances of "Tension Pool" for player view
++ Added config to source your own images in place of the tension_filled and tension_empty webp in the chat footer
+- Removed dependancy and use for _ChatCommands
+- Removed config option to disable scene controls
+- Removed title "Tension Pool:" from the footer of chat bar
+- Removed border around transparent (empty) 'dice' in the chat footer
+- Removed errant image files
+~ Centered images in chat footer
+~ Renamed image files
+
 #### 0.0.45 - API added
 
 #### 0.0.41 - Removed requirement to use Tension Die Dice System in Dice So Nice
